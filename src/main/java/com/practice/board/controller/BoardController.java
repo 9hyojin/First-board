@@ -30,7 +30,7 @@ public class BoardController {
 
     @GetMapping("/board/list")
     public String boardList(Model model){
-        model.addAttribute("List",boardService.boardList());
+        model.addAttribute("list",boardService.boardList());
         return "boardlist";
     }
 
