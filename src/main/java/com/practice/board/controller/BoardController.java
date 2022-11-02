@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -23,8 +24,9 @@ public class BoardController {
     }
 
     @PostMapping("/board/writeProcess")
-    public String boardWriteProcess(Board board, Model model){
-        boardService.write(board);
+    public String boardWriteProcess(Board board, Model model, MultipartFile file) throws Exception{
+        boardService.write(board,file);
+
         model.addAttribute("message","글 작성이 완료되었습니다.");
         model.addAttribute("searchUrl","/board/list");
         return "message";
@@ -38,7 +40,7 @@ public class BoardController {
 
     @GetMapping("/board/view")
     public String boardView(Model model, Integer id){
-        model.addAttribute("board",boardService.boardview(id));
+        model.addAttribute("board",boardService.boardView(id));
         return"boardview";
     }
 
@@ -52,16 +54,16 @@ public class BoardController {
 
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("board", boardService.boardview(id));
+        model.addAttribute("board", boardService.boardView(id));
         return"boardmodify";
     }
 
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model){
-        Board boardTemp = boardService.boardview(id);
+    public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model,MultipartFile file) throws Exception{
+        Board boardTemp = boardService.boardView(id);
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
-        boardService.write(boardTemp);
+        boardService.write(boardTemp,file);
         model.addAttribute("message","글 수정이 완료되었습니다.");
         model.addAttribute("searchUrl","/board/list");
         return "message";
