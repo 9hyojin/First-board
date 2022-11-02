@@ -3,6 +3,8 @@ package com.practice.board.service;
 import com.practice.board.entity.Board;
 import com.practice.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +32,9 @@ public class BoardService {
     }
 
     //게시글 리스트처리
-    public List<Board> boardList(){
-        return boardRepository.findAll();
+    public Page<Board> boardList(Pageable pageable){
+        return boardRepository.findAll(pageable);
+
     }
 
     //상세페이지 불러오기
